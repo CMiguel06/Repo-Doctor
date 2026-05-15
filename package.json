@@ -1,0 +1,25 @@
+{
+  "name": "repo-doctor-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Academic repository health analyser.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "doctor": "npm --workspace @repo-doctor/cli run dev --",
+    "build": "npm run build --workspaces",
+    "dev:web": "npm --workspace @repo-doctor/web run dev",
+    "build:web": "npm --workspace @repo-doctor/web run build",
+    "start:web": "npm --workspace @repo-doctor/web run start",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

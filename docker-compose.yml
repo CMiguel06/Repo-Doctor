@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: repo-doctor-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: repo_doctor
+      POSTGRES_PASSWORD: repo_doctor
+      POSTGRES_DB: repo_doctor
+    ports:
+      - "5432:5432"
+    volumes:
+      - repo_doctor_postgres_data:/var/lib/postgresql/data
+
+  repo-doctor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles:
+      - cli
+
+volumes:
+  repo_doctor_postgres_data:
