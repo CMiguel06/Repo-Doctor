@@ -1,4 +1,7 @@
-# Repo Doctor
+# Repo Doctor 🩺
+
+<img width="864" height="1821" alt="Imagem gerada 2" src="https://github.com/user-attachments/assets/663ae899-77f5-4155-9489-5a8a804743cd" />
+
 
 Repo Doctor is a modern web application for demonstrating repository health analysis. It gives developers, students and technical reviewers an explainable score across documentation, security, architecture, testing, automation, maintainability and portfolio readiness.
 
