@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Repository {
+  id        String   @id @default(cuid())
+  name      String
+  url       String?
+  scans     Scan[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Scan {
+  id             String          @id @default(cuid())
+  repositoryId   String
+  repository     Repository      @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  score          Int
+  riskLevel      String
+  findings       Finding[]
+  categoryScores CategoryScore[]
+  createdAt      DateTime        @default(now())
+}
+
+model Finding {
+  id          String @id @default(cuid())
+  scanId      String
+  scan        Scan   @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  title       String
+  severity    String
+  category    String
+  description String
+  impact      Int
+  suggestion  String
+}
+
+model CategoryScore {
+  id          String @id @default(cuid())
+  scanId      String
+  scan        Scan   @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  name        String
+  score       Int
+  description String
+}
