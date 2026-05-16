@@ -1,49 +1,77 @@
-export type ScanStatus = "idle" | "running" | "completed";
+export type ScanStatus = "idle" | "dragging" | "validating" | "fetching" | "extracting" | "scanning" | "generating_report" | "complete" | "error" | "running" | "completed";
+export type SourceType = "git" | "zip";
+export type Severity = "Critical" | "High" | "Medium" | "Low" | "Informational" | "critical" | "warning" | "info";
 
-export type PhaseStatus = "pending" | "running" | "completed";
+export interface RepositoryMetadata {
+  repositoryName: string;
+  source: string;
+  sourceType: SourceType;
+  analyzedAt: string;
+  branch?: string;
+  commitHash?: string;
+  analyzedFiles: number;
+  detectedLanguages: string[];
+  dependencies: string[];
+}
 
-export type FindingSeverity = "critical" | "warning" | "info";
-
-export type RiskLevel = "low" | "medium" | "high";
-
-export interface ScanPhase {
-  id: string;
+export interface Metric {
+  id: "codeQuality" | "security" | "maintainability" | "performance" | "testing" | "documentation";
   label: string;
-  status: PhaseStatus;
+  score: number;
 }
 
 export interface Finding {
   id: string;
   title: string;
-  severity: FindingSeverity;
+  description: string;
+  severity: "critical"|"warning"|"info";
+  category: string;
+  file?: string;
+  line?: number;
+  recommendation?: string;
+  technicalJustification?: string;
+  impact?: number;
+  suggestion?: string;
+}
+
+export interface FixRecommendation {
+  id: string;
+  title: string;
+  file?: string;
+  line?: number;
+  severity: "critical"|"warning"|"info";
   category: string;
   description: string;
-  impact: number;
   suggestion: string;
 }
 
-export interface CategoryScore {
-  id: string;
-  name: string;
-  score: number;
-  description: string;
+export interface ScanLogEntry {
+  timestamp: string;
+  message: string;
 }
 
-export interface RecommendedFix {
-  id: string;
-  priority: number;
-  title: string;
-  description: string;
-  estimatedGain: number;
+export interface GeneratedReport {
+  executiveSummary: string;
+  riskOverview: string;
+  appendix: string;
+  markdown: string;
 }
 
-export interface RepositoryReport {
-  repositoryName: string;
-  scanDate: string;
-  score: number;
-  riskLevel: RiskLevel;
-  summary: string;
+export interface ScanResult {
+  scanId: string;
+  metadata: RepositoryMetadata;
+  overallScore: number;
+  classification: "Poor" | "Fair" | "Good" | "Excellent";
+  metrics: Metric[];
   findings: Finding[];
-  recommendedFixes: RecommendedFix[];
-  categories: CategoryScore[];
+  fixes: FixRecommendation[];
+  report: GeneratedReport;
+  scanLog: ScanLogEntry[];
 }
+
+export interface CategoryScore { id: string; name: string; score: number; description: string; }
+export interface RecommendedFix { id: string; priority: number; title: string; description: string; estimatedGain: number; }
+export interface RepositoryReport { repositoryName: string; scanDate: string; score: number; riskLevel: "low"|"medium"|"high"; summary: string; findings: Finding[]; recommendedFixes: RecommendedFix[]; categories: CategoryScore[]; }
+export type ScanPhase = { id: string; label: string; status: "pending"|"running"|"completed" };
+export type FindingSeverity = "critical"|"warning"|"info";
+export type RiskLevel = "low"|"medium"|"high";
